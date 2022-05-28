@@ -73,7 +73,7 @@ const followUser = async (users_ids) => {
     try {
       const request = await rwClient.v2.follow(meUser.data.id, user.id);
       if (request.data.following) {
-        console.log("✅ User ID: " + user.username + " - Follow OK");
+        console.log("✅ User @" + user.username + " - Follow OK");
       }
     } catch (error) {
       console.log("❌ Error on followUser() function -> ", error.data);
@@ -93,7 +93,7 @@ const getUserInfo = async (username) => {
 const userFilterDuplicate = (usersArray) => {
   let filteredArray = [];
   usersArray.map((user) => {
-    if (!filteredArray.includes(user.id)) {
+    if (!filteredArray.includes({ id: user.id })) {
       filteredArray.push({ id: user.id, username: user.username });
     }
   });
@@ -101,11 +101,11 @@ const userFilterDuplicate = (usersArray) => {
   return filteredArray;
 };
 
-const mainFunction = (tweet_id, users_ids) => {
-  like(tweet_id);
-  retweet(tweet_id);
-  reply(tweet_id);
-  followUser(userFilterDuplicate(users_ids));
+const mainFunction = async (tweet_id, users_ids) => {
+  await like(tweet_id);
+  await retweet(tweet_id);
+  await reply(tweet_id);
+  await followUser(userFilterDuplicate(users_ids));
 };
 
 export { mainFunction };
